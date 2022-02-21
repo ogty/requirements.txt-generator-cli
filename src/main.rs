@@ -38,14 +38,3 @@ fn main() {
         }
     }
 }
-
-/* 
-Usage:
-    
-    reqgene <directory path> <language> [option]
-Options:
-    -h, --help         Display this message
-    -d, --detail       Display file information
-    -j, --jupyter      For Jupyter Notebook
-    -v, --version      Write the version to a file
-*/
