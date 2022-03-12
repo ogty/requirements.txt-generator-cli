@@ -89,7 +89,12 @@ impl RequirementstxtGeneratorComponents for RequirementstxtGenerator {
         // test_file_paths -> self.file_paths
         let mut modules: Vec<String> = Vec::new();
         for file_path in test_file_paths {
-            let splited_source_code: Vec<String> = read_lines(file_path);
+            let splited_source_code: Vec<String> = if self.is_jupyter {
+                // load .ipynb file and extract source code and split it
+                Vec::new()
+            } else {
+                read_lines(file_path)
+            };
             let mut extracted_modules: Vec<String> = extractor.extract(splited_source_code);
             modules.append(&mut extracted_modules);
         }
@@ -98,7 +103,7 @@ impl RequirementstxtGeneratorComponents for RequirementstxtGenerator {
         modules.dedup();
 
         let result_path: &String = &format!("{}/requirements.txt", self.directory_path);
-        if !self.installed_modules.is_empty() {
+        let result: String = if !self.installed_modules.is_empty() {
             let mut result: Vec<String> = Vec::new();
             for installed_module in &self.installed_modules {
                 for module in &modules {
@@ -106,12 +111,17 @@ impl RequirementstxtGeneratorComponents for RequirementstxtGenerator {
                         result.push(String::from(installed_module));
                     }
                 }
-                write(result_path, result.join("\n"));
             }
+            result.join("\n")
         } else {
-            let result: String = modules.join("\n");
-            write(result_path, result);
+            modules.join("\n")
+        };
+
+        if self.is_show {
+            println!("{}", result);
         }
+
+        write(result_path, result);
     }
 
     fn get_installed_modules(&mut self) {
