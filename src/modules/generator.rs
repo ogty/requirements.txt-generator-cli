@@ -2,7 +2,7 @@ use std::error::Error;
 use std::fs::{self, ReadDir};
 use std::process::{Command, Output};
 
-use crate::modules::extractor::{EachLanguageRegex, ModuleExtractor, ModuleExtractorComponents};
+use crate::modules::extractor::{EachLanguageConfig, ModuleExtractor, ModuleExtractorComponents};
 use crate::modules::file::{read_lines, write};
 
 pub trait Operator {
@@ -71,9 +71,9 @@ impl RequirementstxtGeneratorComponents for RequirementstxtGenerator {
             self.get_installed_modules()
         }
 
-        let language_regex: EachLanguageRegex = match self.language.as_str() {
-            "python" => EachLanguageRegex::Python,
-            "julia" => EachLanguageRegex::Julia,
+        let language_regex: EachLanguageConfig = match self.language.as_str() {
+            "python" => EachLanguageConfig::Python,
+            "julia" => EachLanguageConfig::Julia,
             _ => panic!("Language not supported"),
         };
 
