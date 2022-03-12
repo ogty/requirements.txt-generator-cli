@@ -2,11 +2,7 @@ use std::fs::File;
 use std::io::{self, prelude::*, BufReader, Lines};
 use std::path::{Display, Path};
 
-
-// TODO: cursively search for files
-
-
-pub fn _write(path: &str, content: String) {
+pub fn write(path: &str, content: String) {
     let path: &Path = Path::new(&path);
     let for_display: Display = path.display();
 
