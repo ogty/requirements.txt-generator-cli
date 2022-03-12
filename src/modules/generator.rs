@@ -14,8 +14,8 @@ pub trait Operator {
 impl Operator for RequirementstxtGenerator {
     fn get_directories(&mut self, path: String) -> Result<(), Box<dyn Error>> {
         let mut directories: Vec<String> = Vec::new();
-        let mut directories_iterator: ReadDir = fs::read_dir(path)?;
-        while let Some(entry) = directories_iterator.next() {
+        let directories_iterator: ReadDir = fs::read_dir(path)?;
+        for entry in directories_iterator {
             let entry: fs::DirEntry = entry?;
             let entry_path: String = entry.path().display().to_string();
             directories.push(entry_path);
@@ -115,28 +115,28 @@ impl RequirementstxtGeneratorComponents for RequirementstxtGenerator {
     }
 
     fn get_installed_modules(&mut self) {
-        if self.language == String::from("python") {
+        if self.language == "python" {
             let output: Output = Command::new("pip3")
                 .args(["freeze"])
                 .output()
                 .expect("failed to execute process");
             let output_string: String = String::from_utf8(output.stdout).unwrap();
-            let splited_output: Vec<&str> = output_string.split("\n").collect();
+            let splited_output: Vec<&str> = output_string.split('\n').collect();
             for module_with_version in splited_output {
                 self.installed_modules
                     .push(String::from(module_with_version));
             }
-        } else if self.language == String::from("julia") {
+        } else if self.language == "julia" {
             let output: Output = Command::new("julia")
                 .args(["-e", "using Pkg; Pkg.status();"])
                 .output()
                 .expect("failed to execute process");
             let output_string: String = String::from_utf8(output.stdout).unwrap();
-            let splited_output: Vec<&str> = output_string.split("\n").collect();
+            let splited_output: Vec<&str> = output_string.split('\n').collect();
 
             for module_with_version in splited_output {
                 let splited_module_with_version: Vec<&str> =
-                    module_with_version.split(" ").collect();
+                    module_with_version.split(' ').collect();
 
                 if splited_module_with_version.len() == 3 {
                     let module_name: &str = splited_module_with_version[1];
