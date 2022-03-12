@@ -96,7 +96,7 @@ impl RequirementstxtGeneratorComponents for RequirementstxtGenerator {
 
         modules.sort();
         modules.dedup();
-        
+
         let result_path: &String = &format!("{}/requirements.txt", self.directory_path);
         if !self.installed_modules.is_empty() {
             let mut result: Vec<String> = Vec::new();
@@ -123,24 +123,26 @@ impl RequirementstxtGeneratorComponents for RequirementstxtGenerator {
             let output_string: String = String::from_utf8(output.stdout).unwrap();
             let splited_output: Vec<&str> = output_string.split("\n").collect();
             for module_with_version in splited_output {
-                self.installed_modules.push(String::from(module_with_version));
+                self.installed_modules
+                    .push(String::from(module_with_version));
             }
-
         } else if self.language == String::from("julia") {
             let output: Output = Command::new("julia")
                 .args(["-e", "using Pkg; Pkg.status();"])
                 .output()
                 .expect("failed to execute process");
-            let output_string: String =  String::from_utf8(output.stdout).unwrap();
+            let output_string: String = String::from_utf8(output.stdout).unwrap();
             let splited_output: Vec<&str> = output_string.split("\n").collect();
 
             for module_with_version in splited_output {
-                let tmp: Vec<&str> = module_with_version.split(" ").collect();
+                let splited_module_with_version: Vec<&str> =
+                    module_with_version.split(" ").collect();
 
-                if tmp.len() == 3 {
-                    let module_name: &str = tmp[1];
-                    let module_version: &str = tmp[2];
-                    self.installed_modules.push(format!("{}@{}", module_name, module_version));
+                if splited_module_with_version.len() == 3 {
+                    let module_name: &str = splited_module_with_version[1];
+                    let module_version: &str = splited_module_with_version[2];
+                    self.installed_modules
+                        .push(format!("{}@{}", module_name, module_version));
                 }
             }
         } else {
