@@ -1,4 +1,4 @@
-use std::env;
+use std::{env, process::exit};
 
 mod modules;
 use crate::modules::generator::{RequirementstxtGenerator, RequirementstxtGeneratorComponents};
@@ -36,7 +36,8 @@ fn main() {
     let mut args: Vec<String> = env::args().skip(1).collect();
 
     if args.is_empty() {
-        panic!("No arguments provided");
+        print_usage();
+        return;
     }
 
     // display usage
