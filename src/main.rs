@@ -1,4 +1,4 @@
-use std::{env, process::exit};
+use std::env;
 
 mod modules;
 use crate::modules::generator::{RequirementstxtGenerator, RequirementstxtGeneratorComponents};
@@ -41,25 +41,25 @@ fn main() {
     }
 
     // display usage
-    if args.contains(&"-h".to_string()) || args.contains(&"--help".to_string()) {
+    if args.contains(&String::from("-h")) || args.contains(&String::from("--help")) {
         print_usage();
         return;
     }
 
     // version
-    if args.contains(&"-v".to_string()) || args.contains(&"--version".to_string()) {
+    if args.contains(&String::from("-v")) || args.contains(&String::from("--version")) {
         generator.is_version = true;
         args.retain(|x: &String| x != "-v" && x != "--version");
     }
 
     // jupyter
-    if args.contains(&"-j".to_string()) || args.contains(&"--jupyter".to_string()) {
+    if args.contains(&String::from("-j")) || args.contains(&String::from("--jupyter")) {
         generator.is_jupyter = true;
         args.retain(|x: &String| x != "-j" && x != "--jupyter");
     }
 
     // show
-    if args.contains(&"-s".to_string()) || args.contains(&"--show".to_string()) {
+    if args.contains(&String::from("-s")) || args.contains(&String::from("--show")) {
         generator.is_show = true;
         args.retain(|x: &String| x != "-s" && x != "--show");
     }
